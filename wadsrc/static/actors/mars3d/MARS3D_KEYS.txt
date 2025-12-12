@@ -1,0 +1,91 @@
+///////////////////////////////
+// MT_RED_KEYCARD
+///////////////////////////////
+ACTOR MT_RED_KEYCARD 5
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  +MF_NOTDMATCH
+  +MF_EX_REDLIGHT
+  States
+  {
+    Spawn:
+    {
+      ICR1 A 4
+      ICR1 B 4
+      ICR1 C 4
+      ICR1 D 4 BRIGHT
+      ICR1 E 4
+      ICR1 F 4
+      ICR1 G 4
+      ICR1 H 4 BRIGHT
+      Loop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BLUE_KEYCARD
+///////////////////////////////
+ACTOR MT_BLUE_KEYCARD 6
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  +MF_NOTDMATCH
+  +MF_EX_BLUELIGHT
+  States
+  {
+    Spawn:
+    {
+      ICR2 A 4
+      ICR2 B 4
+      ICR2 C 4
+      ICR2 D 4 BRIGHT
+      ICR2 E 4
+      ICR2 F 4
+      ICR2 G 4
+      ICR2 H 4 BRIGHT
+      Loop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_GOLD_KEYCARD
+///////////////////////////////
+ACTOR MT_GOLD_KEYCARD 13
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  +MF_NOTDMATCH
+  +MF_EX_YELLOWLIGHT
+  States
+  {
+    Spawn:
+    {
+      ICR3 A 4
+      ICR3 B 4
+      ICR3 C 4
+      ICR3 D 4 BRIGHT
+      ICR3 E 4
+      ICR3 F 4
+      ICR3 G 4
+      ICR3 H 4 BRIGHT
+      Loop
+    }
+  }
+}

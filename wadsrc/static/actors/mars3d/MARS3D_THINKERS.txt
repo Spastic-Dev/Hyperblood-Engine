@@ -1,0 +1,83 @@
+///////////////////////////////
+// MT_UNKNOWN54
+// Thinker, possibly related with water ambient sound or flat animation
+///////////////////////////////
+ACTOR MT_UNKNOWN54 54
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_UNKNOWN35
+// Thinker, possibly related with breakable glass
+///////////////////////////////
+ACTOR MT_UNKNOWN35 35
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_UNKNOWN36
+// Thinker, possibly related with breakable glass
+///////////////////////////////
+ACTOR MT_UNKNOWN36 36
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_UNKNOWN2025
+// Thinker, possibly related with breakable glass
+///////////////////////////////
+ACTOR MT_UNKNOWN2025 2025
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  States
+  {
+    Spawn:
+    {
+      TNT1 A 1
+    }
+  }
+}
+

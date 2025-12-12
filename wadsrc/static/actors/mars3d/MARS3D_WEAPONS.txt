@@ -1,0 +1,848 @@
+///////////////////////////////
+// WP_FIST
+///////////////////////////////
+WEAPON WP_FIST
+{
+  Ammo AM_NOAMMO
+  States
+  {
+    Up:
+    {
+      FISG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      FISG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      FISG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      FISF A 4
+      FISF B 4
+      FISF C 4 A_PunchAndKick
+      FISF B 4
+      FISF A 2 A_Refire
+      Goto Ready
+    }
+    Hold:
+    {
+      HADE B 4
+      HADE C 4 A_PunchAndKick
+      HADE B 4
+      HADE D 4
+      HADE E 4 A_PunchAndKick
+      HADE D 4
+      HADE D 2 A_Refire
+      Goto Ready
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BULLETCARTRIDGE
+///////////////////////////////
+ACTOR MT_BULLETCARTRIDGE
+{
+  Health 1000
+  Width 6
+  Height 6
+  Mass 10
+  Scale 0.5
+  Reactiontime 8
+  +MF4_EX_FORCEUNDERWATERGRAVITY
+  States
+  {
+    Spawn:
+    {
+      BULE ABCD 5
+    }
+  }
+}
+
+///////////////////////////////
+// WP_PISTOL
+///////////////////////////////
+WEAPON WP_PISTOL
+{
+  Ammo AM_BULLET
+  States
+  {
+    Up:
+    {
+      LITG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      LITG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      LITG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      LITG A 3
+      TNT1 E 0 A_BulletCartridgeDrop
+      LITF A 4 A_FirePistol
+      LITF B 3
+      LITF A 4 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 7 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_SHOCKGUNMISSILE
+///////////////////////////////
+ACTOR "MT_SHOCKGUNMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound GUN2SHT
+  Deathsound BAREXP
+  RenderStyle TRANSLUCENT
+  Alpha 0.8
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  +MF4_EX_SHOCKGUNDAMAGE
+  States
+  {
+    Spawn:
+    {
+      ELES A 3 BRIGHT
+      ELES B 3 BRIGHT
+      ELES C 3 BRIGHT
+      Loop
+    }
+    Death:
+    {
+      ELEE A 3 BRIGHT
+      ELEE B 3 BRIGHT A_Explode 
+      ELEE C 3 BRIGHT
+      ELEE D 3 BRIGHT
+      ELEE E 3 BRIGHT
+      ELEE F 3 BRIGHT
+      ELEE GGG 1 BRIGHT A_FadeOut(0.05)
+      ELEE HHH 1 BRIGHT A_FadeOut(0.05)
+      ELEE III 1 BRIGHT A_FadeOut(0.05)
+      ELEE JJJ 1 BRIGHT A_FadeOut(0.1)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_SHOCKGUN
+///////////////////////////////
+WEAPON WP_SHOCKGUN
+{
+  Ammo AM_SHOCKGUNAMMO
+  States
+  {
+    Up:
+    {
+      ELEG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      ELEG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      ELEG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      ELEF A 3 A_ShockGunSound
+      ELEF B 3
+      ELEF C 6 A_FireShockGun
+      ELEF D 6 
+      ELEF D 0 A_Refire
+      Goto Ready
+    }
+    Hold:
+    {
+      ELEF C 6 A_FireShockGun
+      ELEF D 6
+      ELEF D 0 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_NERVEGUNMISSILE
+///////////////////////////////
+ACTOR "MT_NERVEGUNMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1310720
+  Damage 0
+  Mass 100
+  Reactiontime 8
+  Seesound GUN3EXP
+  Deathsound GUN3EXP
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FUZS A 3 BRIGHT
+      FUZS B 3 BRIGHT
+      FUZS C 3 BRIGHT
+      FUZS D 3 BRIGHT
+      TNT1 A 0 A_RandomFlipSprite(128)
+      Loop
+    }
+    Death:
+    {
+      FUZE A 3 BRIGHT
+      FUZE B 3 BRIGHT
+      FUZE C 3 BRIGHT
+      FUZE D 3 BRIGHT
+      FUZE E 3 BRIGHT
+      FUZE F 3 BRIGHT A_FriendlyExplode(160) 
+      FUZE G 3 BRIGHT
+      FUZE H 3 BRIGHT
+      FUZE III 1 BRIGHT A_FadeOut(0.03)
+      FUZE JJJ 1 BRIGHT A_FadeOut(0.03)
+      FUZE KKK 1 BRIGHT A_FadeOut(0.03)
+      FUZE LLLLLLLLLL 1 BRIGHT A_FadeOut(0.7)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_NERVEGUN
+///////////////////////////////
+WEAPON WP_NERVEGUN
+{
+  Ammo AM_NERVEGUNAMMO
+  States
+  {
+    Up:
+    {
+      FUZG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      FUZG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      FUZG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      FUZF A 3
+      FUZF B 3
+      FUZF C 3
+      FUZF D 6 A_FireNerveGun
+      FUZF D 6 
+      FUZF D 0 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_FREEZEGUNMISSILE
+///////////////////////////////
+ACTOR "MT_FREEZEGUNMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1310720
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound GUN3EXP
+  Deathsound GUN3EXP
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  +MF3_EX_FREEZEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FRES A 3 BRIGHT
+      FRES B 3 BRIGHT A_FlipSprite
+      FRES A 3 BRIGHT
+      FRES B 3 BRIGHT A_NoFlipSprite
+      Loop
+    }
+    Death:
+    {
+      FREE A 3 BRIGHT
+      FREE B 3 BRIGHT
+      FREE C 3 BRIGHT
+      FREE D 3 BRIGHT
+      FREE E 3 BRIGHT A_Explode
+      FREE F 3 BRIGHT
+      FREE G 3 BRIGHT A_FadeOut10
+      FREE H 3 BRIGHT A_FadeOut10
+      FREE I 3 BRIGHT A_FadeOut10
+      FREE JJJJJ 1 BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_FREEZEGUN
+///////////////////////////////
+WEAPON WP_FREEZEGUN
+{
+  Ammo AM_FREEZEGUNAMMO
+  States
+  {
+    Up:
+    {
+      FREG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      FREG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      FREG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      FREF A 3
+      FREF B 3 
+      FREF C 3
+      FREF D 6 A_FireFreezeGun
+      FREF E 6  
+      FREF E 0 A_Refire
+      Goto Ready
+    }
+    Hold:
+    {
+      FREF C 3
+      FREF D 6 A_FireFreezeGun
+      FREF E 6  
+      FREF E 0 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_FLAMEGUNMISSILE
+///////////////////////////////
+ACTOR "MT_FLAMEGUNMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1310720
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound GUN2ACT
+  Deathsound GUN5EXP
+  DEFAULTTRANSPARENT
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  +MF3_EX_FLAMEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FLAS A 3 BRIGHT
+      FLAS B 3 BRIGHT A_FlipSprite
+      FLAS A 3 BRIGHT
+      FLAS B 3 BRIGHT A_NoFlipSprite
+      Loop
+    }
+    Death:
+    {
+      FLAE A 3 BRIGHT
+      FLAE B 3 BRIGHT
+      FLAE C 3 BRIGHT
+      FLAE D 3 BRIGHT
+      FLAE E 3 BRIGHT A_Explode
+      FLAE F 3 BRIGHT
+      FLAE G 3 BRIGHT 
+      FLAE H 3 BRIGHT
+      FLAE I 3 BRIGHT
+      FLAE J 3 BRIGHT
+      FLAE KKKKK 1 BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_FLAMEGUN
+///////////////////////////////
+WEAPON WP_FLAMEGUN
+{
+  Ammo AM_FLAMEGUNAMMO
+  States
+  {
+    Up:
+    {
+      FLAG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      FLAG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      FLAG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      FLAF A 6
+      FLAF B 6 A_FireFlameGun 
+      FLAF C 6
+      FLAG B 20 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_GRENADEMISSILE
+///////////////////////////////
+ACTOR "MT_GRENADEMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1310720
+  Damage 10
+  Mass 100
+  Gravity 0.2
+  Reactiontime 8
+  Seesound GUN6SHT
+  Deathsound BARLEXP
+  +MF_NOBLOCKMAP
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      BOMS A 3 BRIGHT
+      BOMS B 3 BRIGHT 
+      BOMS C 3 BRIGHT 
+      BOMS D 3 BRIGHT 
+      BOMS E 3 BRIGHT 
+      BOMS F 3 BRIGHT 
+      BOMS G 3 BRIGHT 
+      BOMS H 3 BRIGHT 
+      Loop
+    }
+    Death:
+    {
+      BOME A 3 BRIGHT A_SetTranslucent(0.6)
+      BOME B 2 BRIGHT
+      BOME B 1 A_LocalEarthQuake(35, 1.0, 256)
+      BOME C 3 BRIGHT A_Explode
+      BOME D 3 BRIGHT
+      BOME E 3 BRIGHT
+      BOME F 3 BRIGHT
+      BOME G 3 BRIGHT 
+      BOME HHHHH 1 BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_GRENADES
+///////////////////////////////
+WEAPON WP_GRENADES
+{
+  Ammo AM_GRENADES
+  States
+  {
+    Up:
+    {
+      BOMG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      BOMG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      BOMG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      BOMH ABCDEF 1
+      BOMF A 6
+      BOMF B 6 
+      BOMF C 6
+      BOMF D 6 
+      BOMF E 6 
+      BOMF F 6 
+      BOMF J 10 A_ThowGrenade
+      BOMF JJJJJJJJJJJJJJJ 1 A_LowerWeapon(8)
+      BOMG AAAAAAAAAAAAAAAAAAAA 1 A_RaiseWeapon(8)
+      BOMG A 1 A_Refire
+      Goto Ready
+    }
+    Hold:
+    {
+      BOMH ACE 1
+      BOMF A 1
+      BOMF B 6 
+      BOMF C 6
+      BOMF D 6 
+      BOMF E 6 
+      BOMF F 6 
+      BOMF J 10 A_ThowGrenade
+      BOMF JJJJJJJJJJJJJJJ 1 A_LowerWeapon(8)
+      BOMG AAAAAAAAAAAAAAAAAAAA 1 A_RaiseWeapon(8)
+      BOMG A 1 A_Refire
+      Goto Ready
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_DISKMISSILE
+///////////////////////////////
+ACTOR "MT_DISKMISSILE"
+{
+  Health 1
+  Width 12
+  Height 12
+  Speed 1310720
+  Mass 100
+  Reactiontime 8
+  Seesound GUN7SHT
+  +MF_DROPOFF
+  +MF_NOGRAVITY
+  +MF2_EX_NOTELEPORT
+  +MF3_EX_CEILINGBOUNCE
+  +MF3_EX_WALLBOUNCE
+  +MF4_EX_THRUMONSTERS
+  +MF4_EX_CANSWIMMONFAKESURFACE
+  +MF4_EX_DISKDAMAGE
+  States
+  {
+    Spawn:
+    {
+      CDCS AAA 1 BRIGHT A_BoomerangDisk
+      CDCS BBB 1 BRIGHT A_BoomerangDisk
+      CDCS CCC 1 BRIGHT A_BoomerangDisk
+      CDCS DDD 1 BRIGHT A_BoomerangDisk
+      CDCS EEE 1 BRIGHT A_BoomerangDisk
+      CDCS FFF 1 BRIGHT A_BoomerangDisk
+      Loop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_BOOMERANG
+///////////////////////////////
+WEAPON WP_BOOMERANG
+{
+  Ammo AM_DISK
+  States
+  {
+    Up:
+    {
+      CDCG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      CDCG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      CDCG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      CDCF A 6
+      CDCF B 6 A_ThowBoomerangDisk
+      CDCF C 6
+      CDCF B 20 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ROCKETMISSILE
+///////////////////////////////
+ACTOR "MT_ROCKETMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound GUN8SHT
+  Deathsound "BARLEXP"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  States
+  {
+    Spawn:
+    {
+      MISS A 3 BRIGHT
+      MISS C 3 BRIGHT
+      MISS B 3 BRIGHT
+      MISS D 3 BRIGHT
+      Loop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetTranslucent(0.7)
+      MISE A 6 A_Explode BRIGHT
+      MISE B 4 BRIGHT
+      MISE C 3 BRIGHT
+      MISE D 3 BRIGHT
+      MISE E 3 BRIGHT
+      MISE FFF 1 BRIGHT A_FadeOut(0.05)
+      MISE GGGGGGGGG 1 BRIGHT A_FadeOut(0.05)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_MISSILE
+///////////////////////////////
+WEAPON WP_MISSILE
+{
+  Ammo AM_MISL
+  States
+  {
+    Up:
+    {
+      MISG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      MISG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      MISG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      MISF A 4
+      MISF B 4
+      MISF C 4
+      MISF D 4 
+      MISF E 4 A_FireRocketMissile
+      MISF E 0 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_TRACKINGROCKETMISSILE
+///////////////////////////////
+ACTOR "MT_TRACKINGROCKETMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 25
+  Mass 100
+  Reactiontime 8
+  Seesound GUN8SHT
+  Deathsound "BARLEXP"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_SEEKERMISSILE
+  States
+  {
+    Spawn:
+    {
+      DEVS A 2 BRIGHT
+      DEVS A 1 BRIGHT A_FindTracer1(90, 32)
+      DEVS BΒΒ 1 BRIGHT A_Tracer
+      Loop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetTranslucent(0.7)
+      DEVE A 6 A_Explode BRIGHT
+      DEVE B 4 BRIGHT
+      DEVE C 3 BRIGHT
+      DEVE D 3 BRIGHT
+      DEVE E 3 BRIGHT
+      DEVE F 3 BRIGHT
+      DEVE G 3 BRIGHT
+      DEVE H 3 BRIGHT
+      DEVE III 1 BRIGHT A_FadeOut(0.05)
+      DEVE JJJJJJJJJ 1 BRIGHT A_FadeOut(0.05)
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// WP_TRACKINGMISSILE
+///////////////////////////////
+WEAPON WP_TRACKINGMISSILE
+{
+  Ammo AM_TRACKINGMISL
+  States
+  {
+    Up:
+    {
+      DEVG A 1 A_Raise
+      Loop
+    }
+    Down:
+    {
+      DEVG A 1 A_Lower
+      Loop
+    }
+    Ready:
+    {
+      DEVG A 1 A_WeaponReady
+      Loop
+    }
+    Attack:
+    {
+      DEVF A 5
+      DEVF B 5
+      DEVF C 5 A_FireTrackingMissile
+      DEVF D 5
+      DEVF D 0 A_Refire
+      Goto Ready
+    }
+    Flash:
+    {
+      TNT1 A 4 A_Light2
+      TNT1 A 4 A_Light1
+      TNT1 A 0 A_Light0
+      Stop
+    }
+  }
+}

@@ -1,0 +1,74 @@
+//////////////////////////////////////////////////////////////
+// Armor pick ups using the MAD file patches
+// !! Not present in the original game
+//////////////////////////////////////////////////////////////
+
+///////////////////////////////
+// MT_ARMORSHIELD
+///////////////////////////////
+ACTOR MT_ARMORSHIELD 2015
+{
+  Health 1000
+  Width 24
+  Height 24
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  States
+  {
+    Spawn:
+    {
+      DFK1 A -1
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ARMORVEST
+///////////////////////////////
+ACTOR MT_ARMORVEST 2016
+{
+  Health 1000
+  Width 24
+  Height 24
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  States
+  {
+    Spawn:
+    {
+      DFK2 A -1
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ARMORBONUS
+///////////////////////////////
+ACTOR MT_ARMORBONUS 2017
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  States
+  {
+    Spawn:
+    {
+      DFK3 A 6
+      DFK3 B 6
+      DFK3 C 6
+      DFK3 B 6
+      Loop
+    }
+  }
+}
+
+

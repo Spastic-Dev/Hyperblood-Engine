@@ -1,0 +1,1500 @@
+///////////////////////////////
+// MT_ENEMYSOLDIER
+///////////////////////////////
+ACTOR MT_ENEMYSOLDIER 7
+{
+  Health 20
+  Width 20
+  Height 56
+  Speed 8
+  Painchance 200
+  Mass 100
+  Reactiontime 8
+  GibHealth -10
+  Attacksound GUN1SHT
+  Painsound ARM1HURT
+  Deathsound MONSDTH
+  DropItem "MT_BULLETS"
+  Obituary "%o was shot by an enemy trooper"
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      ARM1 A 10 A_Look
+      ARM1 B 10 A_Look
+      Loop
+    }
+    See:
+    {
+      ARM1 A 4 A_Chase
+      ARM1 A 4 A_Chase
+      ARM1 B 4 A_Chase
+      ARM1 B 4 A_Chase
+      ARM1 C 4 A_Chase
+      ARM1 C 4 A_Chase
+      ARM1 D 4 A_Chase
+      ARM1 D 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      ARM1 E 10 A_FaceTarget
+      ARM1 F 8 A_PosAttack BRIGHT
+      ARM1 E 8
+      TNT1 A 0 A_JumpIf(GAMESKILL < SK_HARD, See)
+      ARM1 E 5 A_FaceTarget
+      ARM1 F 8 A_PosAttack BRIGHT
+      Goto See
+    }
+    Pain:
+    {
+      ARM1 G 3 A_JumpIf(LEVELTIME < CUSTOMPARAM("kiss_sound"), PainNoSound)
+      TNT1 A 0 A_SetCustomParam("kiss_sound", LEVELTIME + 4 * TICRATE)
+      ARM1 G 3 A_PlaySound1("ARM1HURT")
+      Goto See
+    PainNoSound:
+      ARM1 G 6
+      Goto See
+    }
+    Death:
+    {
+      ARM1 H 5
+      ARM1 I 5 A_Scream
+      ARM1 J 5 A_Fall
+      ARM1 K -1
+      Stop
+    }
+    Xdeath:
+    {
+      ARM1 L 5
+      ARM1 M 5 A_Scream
+      ARM1 N 5 FALL
+      ARM1 O 5
+      ARM1 P 5
+      ARM1 Q -1
+    }
+    Raise:
+    {
+      ARM1 K 5
+      ARM1 J 5
+      ARM1 I 5
+      ARM1 H 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ROBOT_SHOT
+///////////////////////////////
+ACTOR "MT_ROBOT_SHOT"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1310720
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound "GUN2SHT"
+  Obituary "%o was taken down by a robot shot"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_REDLIGHT
+  +DEFAULTTRANSPARENT
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      GUNS A 1 BRIGHT
+      GUNS A 5 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+    SpawnLoop:
+      GUNS B 5 BRIGHT
+      GUNS A 5 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(2,3,4) + GAMESKILL, 20)
+      GUNS C RANDOMRANGE(3,6) BRIGHT A_GlowLight "RED"
+      GUNS D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS F RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ROBOT
+///////////////////////////////
+ACTOR MT_ROBOT 3004
+{
+  Health 30
+  Width 20
+  Height 56
+  Speed 8
+  Painchance 150
+  Mass 100
+  Reactiontime 8
+  GibHealth -20
+  SeeSound MECHAPP
+  Attacksound MECHATT
+  Painsound MECHHURT
+  Deathsound MECHDTH
+  DropItem "MT_HEALTH15"
+  +MF_SOLID
+  +MF_NOBLOOD
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      MECH A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      MECH A 4 A_Chase
+      MECH A 4 A_Chase
+      MECH B 4 A_Chase
+      MECH B 4 A_Chase
+      MECH C 4 A_Chase
+      MECH C 4 A_Chase
+      MECH D 4 A_Chase
+      MECH D 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      MECH E 8 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      MECH F 8 BRIGHT A_CustomMissile("MT_ROBOT_SHOT", 53, -11)
+      TNT1 A 0 A_Jump(100, -2)
+      MECH E 8
+      Goto See
+    }
+    Pain:
+    {
+      MECH G 4
+      MECH G 4 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      MECH H 5
+      MECH I 5 A_Scream
+      MECH J 5 A_Fall
+      MECH K 5
+      MECH L 5
+      MECH M 5
+      MECH N 5
+      MECH O -1
+    }
+    Xdeath:
+    {
+      MECH P 5
+      MECH Q 5 A_PlaySound("MECXDTH")
+      MECH R 5 FALL
+      MECH S 5
+      MECH T 5
+      MECH U 5
+      MECH V 5
+      MECH W -1
+    }
+    Raise:
+    {
+      MECH O 5
+      MECH N 5
+      MECH M 5
+      MECH L 5
+      MECH K 5
+      MECH J 5
+      MECH I 5
+      MECH H 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_SMALLSPIDER
+///////////////////////////////
+actor MT_SMALLSPIDER 2050
+{
+  Health 15
+  Radius 20
+  Height 24
+  Speed 14
+  PainChance 200
+  Mass 30
+  Obituary "%o was poisoned by a spider bit"
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  +MF2_EX_GREENBLOOD
+  +MF4_EX_POISONDAMAGE
+  PainSound "FISHHURT"
+  DeathSound "MOS1DTH"
+  MeleeSound "FISHATT"
+  MeleeDamage 5
+  States
+  {
+    Spawn:
+    {
+      MOSA A 5 A_Look
+      Loop
+    See:
+    {
+      MOSA A 3 
+      MOSA BCD 3 A_Chase
+      Loop
+    }
+    Melee:
+    {
+      MOSA E 8 A_FaceTarget
+      MOSA E 6 A_MeleeAttack
+      Goto See
+    }
+    Pain:
+    {
+      MOSA F 2 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      MOSA G 8 A_ScreamAndUnblock
+      MOSA H 8
+      MOSA I 8
+      MOSA J 8
+      MOSA K 8
+      MOSA L 8
+      MOSA M -1
+    }
+}
+
+
+///////////////////////////////
+// MT_REDMECH_SHOT
+///////////////////////////////
+ACTOR "MT_REDMECH_SHOT"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1572864
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound "MIS1ACT"
+  Deathsound "MIS1EXP"
+  Obituary "%o was taken down by a mech"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FISS A 5 BRIGHT 
+    SpawnLoop:
+      FISS A 5 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      FISS B RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      FISS C RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      FISS D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      FISS E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      FISS F RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_REDMECH
+///////////////////////////////
+ACTOR MT_REDMECH 16
+{
+  Health 80
+  Width 20
+  Height 56
+  Speed 10
+  Painchance 120
+  Mass 150
+  Reactiontime 8
+  SeeSound MECHAPP
+  Attacksound MECHATT
+  Painsound MECHHURT
+  Deathsound MECXDTH
+  +MF_SOLID
+  +MF_NOBLOOD
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      MEC2 A 4 A_Look
+      MEC2 C 4 A_Look
+      Loop
+    }
+    See:
+    {
+      MEC2 B 4 A_Chase
+      MEC2 B 4 A_Chase
+      MEC2 C 4 A_Chase
+      MEC2 C 4 A_Chase
+      MEC2 D 4 A_Chase
+      MEC2 D 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      MEC2 E 8 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      MEC2 F 4 BRIGHT A_CustomMissile("MT_REDMECH_SHOT", 60, -22)
+      TNT1 A 0 A_Jump(200, -2)
+      MEC2 E 8
+      Goto See
+    }
+    Pain:
+    {
+      MEC2 G 4
+      MEC2 G 4 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      MEC2 H 5
+      MEC2 I 5 A_Scream
+      MEC2 J 5 A_Fall
+      MEC2 K 5
+      MEC2 L 5
+      MEC2 M 5
+      MEC2 N -1
+    }
+    Raise:
+    {
+      MEC2 N 5
+      MEC2 M 5
+      MEC2 L 5
+      MEC2 K 5
+      MEC2 J 5
+      MEC2 I 5
+      MEC2 H 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_FLYINGROBOT
+///////////////////////////////
+ACTOR MT_FLYINGROBOT 20
+{
+  Health 80
+  Width 24
+  Height 24
+  Speed 8
+  Painchance 80
+  Mass 100
+  Reactiontime 8
+  SeeSound MECHAPP
+  Attacksound MECHATT
+  Painsound MECHHURT
+  Deathsound MECXDTH
+  +MF_SOLID
+  +MF_NOBLOOD
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_FLOAT
+  +MF_COUNTKILL
+  +MF_EX_SPAWNFLOAT
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      HEAD A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      HEAD A 4 A_Chase
+      HEAD A 4 A_Chase
+      HEAD B 4 A_Chase
+      HEAD B 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      HEAD C 4 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      HEAD D 4 BRIGHT A_CustomMissile("MT_ROBOT_SHOT", 0, 0)
+      TNT1 A 0 A_Jump(160 + GAMESKILL * 10, -2)
+      HEAD C 4 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      HEAD D 4 BRIGHT A_CustomMissile("MT_ROBOT_SHOT", 0, 0)
+      TNT1 A 0 A_Jump(160 + GAMESKILL * 10, -2)
+      HEAD E 4
+      Goto See
+    }
+    Pain:
+    {
+      HEAD F 4
+      HEAD F 4 A_Pain
+      HEAD F 4
+      Goto See
+    }
+    Death:
+    {
+      HEAD G 5
+      HEAD H 5 A_Scream
+      HEAD I 5 A_Gravity
+      HEAD J 5 A_Fall
+      HEAD K 5
+      HEAD L 5
+      HEAD M 5
+      HEAD N 5
+      HEAD O 5
+      HEAD P -1
+    }
+    Raise:
+    {
+      HEAD P 5
+      HEAD O 5
+      HEAD N 5
+      HEAD M 5
+      HEAD L 5
+      HEAD K 5
+      HEAD J 5
+      HEAD I 5
+      HEAD H 5
+      HEAD G 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_MANWITHMASK
+///////////////////////////////
+ACTOR MT_MANWITHMASK 43
+{
+  Health 150
+  Width 30
+  Height 56
+  Speed 10
+  Painchance 120
+  Mass 200
+  Reactiontime 8
+  Deathsound MONSDTH
+  Obituary "%o was scratched to death"
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      SARG A 10 A_Look
+      SARG A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      SARG B 2 A_Chase
+      SARG B 2 A_Chase
+      SARG C 2 A_Chase
+      SARG C 2 A_Chase
+      SARG D 2 A_Chase
+      SARG D 2 A_Chase
+      Loop
+    }
+    Melee:
+    {
+      SARG E 5 A_FaceTarget
+      SARG F 5 A_FaceTarget
+      SARG G 5 A_CustomMeleeAttack(5, "SRAGATT", "SRAGATT")
+      Goto See
+    }
+    Pain:
+    {
+      SARG H 2
+      SARG H 2 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      SARG I 8
+      SARG J 4 A_Scream
+      SARG K 4
+      SARG L 4 A_Fall
+      SARG M 4
+      SARG N -1
+    }
+    Raise:
+    {
+      SARG N 5
+      SARG M 5
+      SARG L 5
+      SARG K 5
+      SARG J 5
+      SARG I 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_CEILINGDEFENDER_SHOT
+///////////////////////////////
+ACTOR "MT_CEILINGDEFENDER_SHOT"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1310720
+  Damage 2
+  Mass 100
+  Reactiontime 8
+  Seesound "GUN2SHT"
+  Obituary "%o was killed by a ceiling defender"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_REDLIGHT
+  +DEFAULTTRANSPARENT
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      GUNS A 1 BRIGHT
+      GUNS A 5 BRIGHT
+      TNT1 A 0 A_GlowLight "NONE"
+    SpawnLoop:
+      GUNS B 5 BRIGHT
+      GUNS A 5 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(1,2,3), 20)
+      GUNS C RANDOMRANGE(3,6) BRIGHT A_GlowLight "RED"
+      GUNS D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS F RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_CEILINGDEFENDER
+///////////////////////////////
+ACTOR MT_CEILINGDEFENDER 49
+{
+  Health 80
+  Width 24
+  Height 24
+  Speed 0
+  Painchance 60
+  Mass 100
+  Reactiontime 8
+  ActiveSound DEF2ACT
+  SeeSound DEF2ACT
+  Attacksound DEF2ATT
+  Deathsound DEF2DTH
+  DropItem "MT_HEALTH15"
+  +MF_SOLID
+  +MF_NOBLOOD
+  +MF_SHOOTABLE
+  +MF_NOGRAVITY
+  +MF_COUNTKILL
+  +MF_SPAWNCEILING
+  +MF2_EX_DONTINFIGHTMONSTERS
+  +MF3_EX_NOGRAVITYDEATH
+  +MF4_EX_ABSOLUTEDROPITEMPOS
+  States
+  {
+    Spawn:
+    {
+      DEF2 A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      DEF2 A 4 A_TurretChase
+      DEF2 A 4 A_TurretChase
+      Loop
+    }
+    Missile:
+    {
+      DEF2 B 3 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      DEF2 C 3 BRIGHT A_CustomMissile("MT_CEILINGDEFENDER_SHOT", 3, -2)
+      TNT1 A 0 A_Jump(170 + GAMESKILL * 10, -2)
+    MissilePause:
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF2 B RANDOMRANGE(3, 6) A_FaceTarget
+      Goto See
+    }
+    Pain:
+    {
+      DEF2 D 4 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      DEF2 E 5
+      DEF2 F 5 A_Scream
+      DEF2 G 5
+      DEF2 H 5 A_NoBlocking
+      DEF2 I 5
+      DEF2 J 5
+      DEF2 K 5
+      DEF2 L -1
+    }
+    Raise:
+    {
+      DEF2 L 5
+      DEF2 K 5
+      DEF2 J 5
+      DEF2 I 5
+      DEF2 H 5
+      DEF2 G 5
+      DEF2 F 5
+      DEF2 E 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_POISON_SHOT
+///////////////////////////////
+ACTOR "MT_POISON_SHOT"
+{
+  Health 1000
+  Radius 14
+  Height 14
+  Speed 1310720
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Obituary "%o was poisoned from a sewer creature"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_GREENLIGHT
+  +DEFAULTTRANSPARENT
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      POSN A 1 BRIGHT
+      POSN A 5 BRIGHT
+      POSN A 0 A_GlowLight "NONE"
+    SpawnLoop:
+      POSN B 5 BRIGHT
+      POSN A 5 BRIGHT
+      GoTo SpawnLoop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      TNT1 A 0 A_PlayerHurtExplode(RANDOMPICK(4,5,6), 20)
+      POSN C RANDOMRANGE(3,6) BRIGHT A_GlowLight "GREEN"
+      POSN D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      POSN E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_WATERFEAR
+///////////////////////////////
+ACTOR MT_WATERFEAR 3001
+{
+  Health 80
+  Width 20
+  Height 32
+  Speed 8
+  Painchance 0
+  Mass 150
+  Reactiontime 8
+  GibHealth -40
+  SeeSound LAKEACT
+  ActiveSound LAKEAPP
+  Attacksound LAKEATT
+  Painsound LAKEHURT
+  Deathsound LAKEDTH
+  spriteDY -2.0
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  +MF2_EX_CANTLEAVEFLOORPIC
+  +MF4_EX_CANSWIMMONFAKESURFACE
+  +MF4_EX_POISONDAMAGE
+  States
+  {
+    Spawn:
+    {
+      LAKE A 4 A_Look
+      TNT1 A 0 A_NoBlocking
+      LAKE A 4 A_Look
+      Loop
+    }
+    See:
+    {
+      TNT1 A 0 A_SetPainChance(0)
+      TNT1 A 0 A_NoBlocking
+      LAKE B 4 A_Chase
+      LAKE B 4 A_Chase
+      LAKE C 4 A_Chase
+      LAKE C 4 A_Chase
+      LAKE D 4 A_Chase
+      LAKE D 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      TNT1 A 0 A_SetPainChance(150)
+      TNT1 A 0 A_Blocking
+      LAKE E 4 A_FaceTarget
+      LAKE F 4 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      LAKE G 4 A_CustomMissile("MT_POISON_SHOT", 15, 0)
+      LAKE H 4 A_FaceTarget
+      LAKE I 4 A_FaceTarget
+      LAKE J 4 A_FaceTarget
+      LAKE K 4 A_FaceTarget
+      LAKE L 4 A_FaceTarget
+      TNT1 A 0 A_Jump(160 + GAMESKILL * 10, -8)
+      Goto See
+    }
+    Pain:
+    {
+      TNT1 A 0 A_SetPainChance(0)
+      TNT1 A 0 A_Blocking
+      LAKE M 4
+      LAKE N 4 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetPainChance(0)
+      LAKE O 5
+      LAKE P 5 A_Scream
+      LAKE Q 5 A_Fall
+      LAKE R 5
+      Stop
+    }
+    XDeath:
+    {
+      TNT1 A 0 A_SetPainChance(0)
+      LAKE S 5
+      LAKE T 5 A_Scream
+      LAKE U 5 A_Fall
+      LAKE V 5
+      LAKE W 5
+      LAKE X 5
+      LAKE Y 5
+      Stop
+    }
+    Raise:
+    {
+      TNT1 A 0 A_SetPainChance(0)
+      LAKE R 5
+      LAKE Q 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ALIENDEAMON
+///////////////////////////////
+ACTOR "MT_ALIENDEAMON" 3005
+{
+  Health 100
+  Width 30
+  Height 56
+  Speed 8
+  Painchance 150
+  Mass 180
+  Reactiontime 10
+  GibHealth -40
+  ActiveSound MOUSAPP
+  PainSound MOUSHURT
+  Deathsound MOUSDTH
+  Obituary "%o was taken down by an alien deamon"
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      MOUS A 10 A_Look
+      MOUS A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      MOUS B 6 A_Chase
+      MOUS C 6 A_Chase
+      MOUS D 6 A_Chase
+      MOUS C 6 A_Chase
+      Loop
+    }
+    Melee:
+    {
+      MOUS E 5 A_FaceTarget
+      MOUS F 3 A_FaceTarget
+      MOUS G 5 A_CustomMeleeAttack(5, "MOUSATT", "MOUSATT")
+      MOUS F 3 A_FaceTarget
+      Goto See
+    }
+    Pain:
+    {
+      MOUS H 4 A_Pain
+      MOUS K 4
+      Goto See
+    }
+    Death:
+    {
+      MOUS M 5
+      MOUS N 5 A_Scream
+      MOUS O 5
+      MOUS P 5 A_Fall
+      MOUS Q -1
+    }
+    XDeath:
+    {
+      MOUS R 5
+      MOUS S 5 A_Scream
+      MOUS T 5
+      MOUS U 5
+      MOUS V 5 A_Fall
+      MOUS W 5
+      MOUS X 5
+      MOUS Y -1
+    }
+    Raise:
+    {
+      MOUS Q 5
+      MOUS P 5
+      MOUS O 5
+      MOUS N 5
+      MOUS M 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_CHEMICAL_SHOT
+///////////////////////////////
+ACTOR MT_CHEMICAL_SHOT : MT_ROBOT_SHOT
+{
+  Damage 1
+  Obituary "%o was taken down by a chemical shot"
+  States
+  {
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_RandomFlipSprite(128)
+      GUNS C RANDOMRANGE(3,6) BRIGHT A_GlowLight "RED"
+      GUNS D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      GUNS F RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_CHEMICAL
+///////////////////////////////
+ACTOR MT_CHEMICAL 3003
+{
+  Health 120
+  Width 20
+  Height 56
+  Speed 8
+  Painchance 150
+  Mass 150
+  Reactiontime 8
+  GibHealth -40
+  Attacksound MECHATT
+  Painsound CHEMHURT
+  Deathsound MONSDTH
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      CHEM A 4 A_Look
+      CHEM B 4 A_Look
+      Loop
+    }
+    See:
+    {
+      CHEM C 4 A_Chase
+      CHEM C 4 A_Chase
+      CHEM D 4 A_Chase
+      CHEM D 4 A_Chase
+      Loop
+    }
+    Missile:
+    {
+      CHEM E 4 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      TNT1 A 0 A_CustomMissile("MT_CHEMICAL_SHOT", 58, -5)
+      CHEM E 4 A_CustomMissile("MT_CHEMICAL_SHOT", 58, 5)
+      CHEM E 4 A_FaceTarget
+      TNT1 A 0 A_Jump(240, -4)
+      Goto See
+    }
+    Pain:
+    {
+      CHEM F 8 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      CHEM F 8
+      CHEM G 5 A_Scream
+      CHEM H 5 A_Fall
+      CHEM I -1
+      Stop
+    }
+    XDeath:
+    {
+      CHEM J 5
+      CHEM K 5 A_Scream
+      CHEM L 5 A_Fall
+      CHEM M 5 A_Fall
+      CHEM N 5
+      CHEM 0 5
+      CHEM P -1
+      Stop
+    }
+    Raise:
+    {
+      CHEM I 5
+      CHEM H 5
+      CHEM G 5
+      CHEM F 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_FISH
+///////////////////////////////
+ACTOR "MT_FISH" 3002
+{
+  Health 80
+  Width 24
+  Height 24
+  Speed 8
+  Painchance 120
+  Mass 40
+  Reactiontime 8
+  ActiveSound BUBBLE
+  PainSound FISHHURT
+  Deathsound FISHDTH
+  Obituary "%o was eaten by piranhas"
+  +MF_SOLID
+  +MF_NOGRAVITY
+  +MF_SHOOTABLE
+  +MF_FLOAT
+  +MF_COUNTKILL
+  +MF_EX_SPAWNFLOAT
+  +MF2_EX_DONTINFIGHTMONSTERS
+  +MF3_EX_NOGRAVITYDEATH
+  States
+  {
+    Spawn:
+    {
+      FISH A 10 A_Look
+      FISH A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      FISH B 5 A_Chase
+      FISH C 5 A_Chase
+      FISH D 5 A_Chase
+      FISH C 5 A_Chase
+      Loop
+    }
+    Melee:
+    {
+      FISH E 5 A_FaceTarget
+      FISH F 5 A_CustomMeleeAttack(5, "FISHATT", "FISHATT")
+      TNT1 A 0 A_JumpIf(GAMESKILL < SK_HARD, See)
+      FISH G 5 A_FaceTarget
+      Goto See
+    }
+    Pain:
+    {
+      FISH H 8 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      FISH I 5 A_SetPushable
+      FISH J 5 A_Scream
+      FISH K 5 A_ThrustZ(1.0)
+      FISH L 5 
+      FISH M 5
+      FISH N 350
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+      FISH NNNNNNNNNNNNNNNNNNNN 1 A_FadeOut(0.005)
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_DEFENDER_SHOT
+///////////////////////////////
+actor MT_DEFENDER_SHOT
+{
+  Health 1000
+  Radius 16
+  Height 16
+  Speed 1310720
+  Damage 5
+  Mass 100
+  Reactiontime 8
+  Seesound "GUN2SHT"
+  Obituary "%o was killed by an enemy defender"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF_EX_REDLIGHT
+  +DEFAULTTRANSPARENT
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      DEVS A 5 BRIGHT
+      DEVS B 5 BRIGHT
+      Loop
+    }
+    Death:
+    {
+      TNT1 A 0 A_SetScale(RANDOMPICK(9,10,11)/10)
+      TNT1 A 0 A_Jump(128, 2)
+      TNT1 A 0 A_FlipSprite
+      DEVE A RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      DEVE B RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      DEVE C RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      DEVE D RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      DEVE E RANDOMRANGE(3,6) BRIGHT A_FadeOut10
+      DEVE F RANDOMRANGE(3,6) BRIGHT 
+      DEVE G RANDOMRANGE(3,6) BRIGHT 
+      DEVE H RANDOMRANGE(3,6) BRIGHT 
+      DEVE I RANDOMRANGE(3,6) BRIGHT 
+      DEVE J RANDOMRANGE(3,6) BRIGHT 
+      Stop
+    }
+  }
+}
+
+///////////////////////////////
+// MT_DEFENDER
+///////////////////////////////
+ACTOR MT_DEFENDER 3006
+{
+  Health 100
+  Width 32
+  Height 32
+  Speed 0
+  Painchance 80
+  Mass 100
+  Reactiontime 8
+  ActiveSound MECHAPP
+  SeeSound DEF2ACT
+  Attacksound DEF2ATT
+  Deathsound DEF2DTH
+  +MF_SOLID
+  +MF_NOBLOOD
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF2_EX_DONTINFIGHTMONSTERS
+  +MF3_EX_NOGRAVITYDEATH
+  States
+  {
+    Spawn:
+    {
+      DEF1 A 10 A_Look
+      Loop
+    }
+    See:
+    {
+      DEF1 A 4 A_TurretChase
+      DEF1 B 4 A_TurretChase
+      DEF1 C 4 A_TurretChase
+      DEF1 D 4 A_TurretChase
+      Loop
+    }
+    Missile:
+    {
+      DEF1 E 10 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      DEF1 F 10 BRIGHT A_CustomMissile("MT_DEFENDER_SHOT", 4, 0)
+      TNT1 A 0 A_Jump(140 + GAMESKILL * 10, -2)
+      Goto See
+    MissilePause:
+      DEF1 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF1 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF1 B RANDOMRANGE(3, 6) A_FaceTarget
+      DEF1 B RANDOMRANGE(3, 6) A_FaceTarget
+    }
+    Pain:
+    {
+      DEF1 H 8 A_Pain
+      Goto See
+    }
+    Death:
+    {
+      DEF1 I 5
+      DEF1 J 5 A_Scream
+      DEF1 K 5
+      DEF1 L 5 A_Fall
+      DEF1 M 5
+      DEF1 N 5
+      DEF1 O 5
+      DEF1 P -1
+    }
+    Raise:
+    {
+      DEF1 P 5
+      DEF1 O 5
+      DEF1 N 5
+      DEF1 M 5
+      DEF1 L 5
+      DEF1 K 5
+      DEF1 J 5
+      DEF1 I 5
+      Goto See
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BOSSSHOCKMISSILE
+///////////////////////////////
+ACTOR "MT_BOSSSHOCKMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound GUN2SHT
+  Deathsound BAREXP
+  RenderStyle TRANSLUCENT
+  Alpha 0.8
+  Obituary "%o was killed by the boss"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      ELES A 3 BRIGHT
+      ELES B 3 BRIGHT
+      ELES C 3 BRIGHT
+      Loop
+    }
+    Death:
+    {
+      ELEE A 3 BRIGHT
+      ELEE B 3 BRIGHT A_PlayerHurtExplode(RANDOMPICK(30,40,50) + GAMESKILL * 20, 64)
+      ELEE C 3 BRIGHT
+      ELEE D 3 BRIGHT
+      ELEE E 3 BRIGHT
+      ELEE F 3 BRIGHT
+      ELEE GGG 1 BRIGHT A_FadeOut(0.05)
+      ELEE HHH 1 BRIGHT A_FadeOut(0.05)
+      ELEE III 1 BRIGHT A_FadeOut(0.05)
+      ELEE JJJ 1 BRIGHT A_FadeOut(0.1)
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BOSSFLAMEMISSILE
+///////////////////////////////
+ACTOR "MT_BOSSFLAMEMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound GUN2ACT
+  Deathsound GUN5EXP
+  DEFAULTTRANSPARENT
+  Obituary "%o was fried by the boss"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FLAS A 3 BRIGHT
+      FLAS B 3 BRIGHT A_FlipSprite
+      FLAS A 3 BRIGHT
+      FLAS B 3 BRIGHT A_NoFlipSprite
+      Loop
+    }
+    Death:
+    {
+      FLAE A 3 BRIGHT
+      FLAE B 3 BRIGHT
+      FLAE C 3 BRIGHT A_PlayerHurtExplode(RANDOMPICK(30,40,50) + GAMESKILL * 20, 64)
+      FLAE D 3 BRIGHT
+      FLAE E 3 BRIGHT
+      FLAE F 3 BRIGHT
+      FLAE G 3 BRIGHT 
+      FLAE H 3 BRIGHT
+      FLAE I 3 BRIGHT
+      FLAE J 3 BRIGHT
+      FLAE KKKKK 1 BRIGHT A_FadeOut10
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_BOSSFREEZEMISSILE
+///////////////////////////////
+ACTOR "MT_BOSSFREEZEMISSILE"
+{
+  Health 1000
+  Width 12
+  Height 12
+  Speed 1572864
+  Damage 20
+  Mass 100
+  Reactiontime 8
+  Seesound GUN3EXP
+  Deathsound GUN3EXP
+  RenderStyle TRANSLUCENT
+  Alpha 0.8
+  Obituary "%o was freezed by the boss"
+  +MF_NOBLOCKMAP
+  +MF_NOGRAVITY
+  +MF_DROPOFF
+  +MF_MISSILE
+  +MF3_EX_ABSOLUTEDAMAGE
+  States
+  {
+    Spawn:
+    {
+      FRES A 3 BRIGHT
+      FRES B 3 BRIGHT A_FlipSprite
+      FRES A 3 BRIGHT
+      FRES B 3 BRIGHT A_NoFlipSprite
+      Loop
+    }
+    Death:
+    {
+      FREE A 3 BRIGHT
+      FREE B 3 BRIGHT
+      FREE C 3 BRIGHT A_PlayerHurtExplode(RANDOMPICK(30,40,50) + GAMESKILL * 20, 64)
+      FREE D 3 BRIGHT
+      FREE E 3 BRIGHT
+      FREE F 3 BRIGHT
+      FREE GGG 1 BRIGHT A_FadeOut(0.05)
+      FREE HHH 1 BRIGHT A_FadeOut(0.05)
+      FREE III 1 BRIGHT A_FadeOut(0.05)
+      FREE JJJJJJ 1 BRIGHT A_FadeOut(0.05)
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_ALIENBOSS
+///////////////////////////////
+ACTOR MT_ALIENBOSS 2051
+{
+  Health 1200
+  Width 32
+  Height 96
+  Speed 14
+  Painchance 30
+  Mass 1000
+  Reactiontime 8
+  MinMissileChance 220
+  ActiveSound SWON
+  Attacksound MIS1ACT
+  Painsound MIS1ACT
+  Deathsound DEATH2
+  +MF_SOLID
+  +MF_SHOOTABLE
+  +MF_COUNTKILL
+  +MF_EX_BOSS
+  +MF2_EX_GREENBLOOD
+  +MF2_EX_DONTINFIGHTMONSTERS
+  States
+  {
+    Spawn:
+    {
+      UFO1 ABABABABAB 10 A_Look
+      TNT1 A 0 A_ChangeFlag("MF_SHADOW", RANDOMPICK("TRUE","FALSE"))
+      Loop
+    }
+    See:
+    {
+      TNT1 A 0 A_ChangeFlag("MF_SHADOW", RANDOMPICK("TRUE","FALSE"))
+    See2:
+      UFO1 C 8 A_Chase
+      UFO1 D 8 A_Chase
+      UFO1 C 8 A_Chase
+      UFO1 D 8 A_Chase
+      GoTo See2
+    }
+    Missile:
+    {
+      TNT1 A 0 A_Jump(170, "Missile2", "Missile3")
+      UFO1 G 4 A_FaceTarget
+      TNT1 A 0 A_AttackSound
+      UFO1 H 4 A_CustomMissile("MT_BOSSSHOCKMISSILE", 65, -25)
+      UFO1 G 4 A_FaceTarget
+      TNT1 A 0 A_Jump(120 + GAMESKILL * 15, -3)
+      Goto See
+    Missile2:
+      UFO1 I 4 A_FaceTarget
+      UFO1 J 4 A_CustomMissile("MT_BOSSFLAMEMISSILE", 65, -25)
+      UFO1 I 4 A_FaceTarget
+      TNT1 A 0 A_Jump(120 + GAMESKILL * 15, -3)
+      Goto See
+    Missile3:
+      UFO1 I 4 A_FaceTarget
+      UFO1 V 4 A_CustomMissile("MT_BOSSFREEZEMISSILE", 65, -25)
+      UFO1 I 4 A_FaceTarget
+      TNT1 A 0 A_Jump(120 + GAMESKILL * 15, -3)
+      Goto See
+    }
+    Pain:
+    {
+      TNT1 A 0 A_GhostOff
+      UFO1 K 4
+      Goto See2
+    }
+    Death:
+    {
+      TNT1 A 0 A_GhostOff
+      UFO1 L 4
+      UFO1 M 4 A_Scream
+      UFO1 N 4
+      UFO1 O 4
+      UFO1 P 4
+      UFO1 Q 4
+      UFO1 R 4 A_Fall
+      UFO1 S 4
+      UFO1 T 4
+      UFO1 U 35
+      UFO1 U 10 A_BossDeath
+      UFO1 U -1
+      Stop
+    }
+  }
+}

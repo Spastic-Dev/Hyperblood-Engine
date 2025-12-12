@@ -1,0 +1,51 @@
+//////////////////////////////////////////////////////////////
+// Extra power-ups pick ups using the MAD file patches
+// !! Not present in the original game
+//////////////////////////////////////////////////////////////
+
+///////////////////////////////
+// MT_RADIATIONSUIT
+///////////////////////////////
+ACTOR MT_RADIATIONSUIT 2026
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  States
+  {
+    Spawn:
+    {
+      DFK4 A -1
+      Stop
+    }
+  }
+}
+
+
+///////////////////////////////
+// MT_NIGHTVISOR
+///////////////////////////////
+ACTOR MT_NIGHTVISOR 2030
+{
+  Health 1000
+  Width 20
+  Height 16
+  Mass 100
+  Reactiontime 8
+  +MF_SPECIAL
+  States
+  {
+    Spawn:
+    {
+      RGLA A 4
+      RGLA B 4
+      RGLA C 4
+      RGLA D 4
+      RGLA E 4
+      Loop
+    }
+  }
+}
